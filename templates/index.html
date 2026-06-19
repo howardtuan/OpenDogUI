@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OpenDog Studio</title>
+    <link rel="icon" href="{{ url_for('static', filename='assets/dog.jpg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar glass">
+        <a class="brand" href="/" aria-label="OpenDog Studio 首頁">
+          <img src="{{ url_for('static', filename='assets/dog.jpg') }}" alt="狗頭像縮圖">
+          <span>OpenDog Studio</span>
+        </a>
+
+        <div class="topbar-actions">
+          <a class="liquid-button secondary" href="{{ url_for('download_dog') }}">下載原圖</a>
+          <label class="liquid-button secondary" for="imageUpload">上傳裝飾</label>
+          <button class="liquid-button primary" id="downloadArtwork" type="button">下載作品</button>
+        </div>
+      </header>
+
+      <main class="editor-layout">
+        <aside class="panel glass upload-panel">
+          <div class="panel-heading">
+            <p>素材</p>
+            <h1>上傳裝飾</h1>
+          </div>
+          <p class="muted">
+            可以一次選多張圖片，拖曳到狗頭上，再用角落控制點調整大小、上方圓點旋轉。
+          </p>
+
+          <input id="imageUpload" class="visually-hidden" type="file" accept="image/*" multiple>
+          <label class="upload-drop" for="imageUpload">
+            <span class="upload-icon">+</span>
+            <span>選擇圖片</span>
+            <small>PNG、JPG、WebP、GIF 皆可</small>
+          </label>
+
+          <div class="thumb-list" id="thumbList" aria-live="polite">
+            <p class="empty-note">尚未上傳裝飾。</p>
+          </div>
+        </aside>
+
+        <section class="canvas-panel glass" aria-label="狗頭像編輯器">
+          <div class="canvas-header">
+            <div>
+              <p>編輯畫布</p>
+              <h2>把物件放到狗身上</h2>
+            </div>
+            <button class="icon-button" id="clearSelection" type="button" title="取消選取">取消選取</button>
+          </div>
+
+          <div class="canvas-wrap">
+            <canvas id="avatarCanvas" width="1180" height="1180" aria-label="狗頭像編輯畫布"></canvas>
+          </div>
+
+          <div class="canvas-status" id="statusText">載入狗頭中...</div>
+        </section>
+
+        <aside class="panel glass export-panel">
+          <div class="panel-heading">
+            <p>輸出</p>
+            <h2>下載與微調</h2>
+          </div>
+
+          <div class="selected-card" id="selectedCard">
+            <span class="selected-dot"></span>
+            <div>
+              <strong id="selectedName">沒有選取物件</strong>
+              <small id="selectedHint">點一下畫布上的裝飾，或從素材列表選取。</small>
+            </div>
+          </div>
+
+          <div class="control-stack">
+            <label>
+              <span>大小</span>
+              <input id="sizeRange" type="range" min="5" max="160" value="28" disabled>
+            </label>
+            <label>
+              <span>旋轉</span>
+              <input id="rotationRange" type="range" min="-180" max="180" value="0" disabled>
+            </label>
+            <label>
+              <span>透明度</span>
+              <input id="opacityRange" type="range" min="20" max="100" value="100" disabled>
+            </label>
+          </div>
+
+          <div class="button-grid">
+            <button class="liquid-button secondary" id="bringForward" type="button" disabled>往上層</button>
+            <button class="liquid-button secondary" id="sendBackward" type="button" disabled>往下層</button>
+            <button class="liquid-button danger" id="deleteSelected" type="button" disabled>刪除物件</button>
+            <button class="liquid-button secondary" id="resetCanvas" type="button">重置畫布</button>
+          </div>
+
+          <a class="liquid-button wide secondary" href="{{ url_for('download_dog') }}">下載原圖</a>
+          <button class="liquid-button wide primary" id="downloadArtworkSide" type="button">下載作品</button>
+        </aside>
+      </main>
+    </div>
+
+    <script>
+      window.OPENDOG = {
+        dogPhotoUrl: "{{ url_for('dog_photo') }}",
+      };
+    </script>
+    <script src="{{ url_for('static', filename='js/editor.js') }}" defer></script>
+  </body>
+</html>
